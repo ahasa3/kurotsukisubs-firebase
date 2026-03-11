@@ -15,19 +15,25 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from .env file
-load_dotenv(BASE_DIR / '.env')
+if (BASE_DIR / ".env").exists():
+    load_dotenv(BASE_DIR / ".env")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SECURITY
 # ─────────────────────────────────────────────────────────────────────────────
 SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY',
-    'django-insecure-i=vwwvw)rjyr@9y%kqfnyo$3t2uxo6a-#frxf#5)z_wx3%jtfq'
+    str(BASE_DIR / 'django_secret_key.json')
 )
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'False'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get('.vercel.app', 'localhost,127.0.0.1').split(',')
+
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS",
+    "https://*.vercel.app"
+).split(",")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # INSTALLED APPS
@@ -65,7 +71,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # Look for templates in the repo-level templates/ directory
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
