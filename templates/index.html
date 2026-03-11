@@ -29,13 +29,17 @@
   <div class="hero-content fade-in">
     <div class="hero-badge">
       <span class="hero-badge-dot" aria-hidden="true"></span>
-      Nogizaka46 Fansub
+      Nogizaka46 Fansub Community
     </div>
 
     <h1 class="hero-title">
       <span class="title-main">Kurotsukisubs</span>
-      <span class="title-sub">黒月サブス</span>
+      <span class="title-sub">黒月サブス — Under the Black Moon</span>
     </h1>
+
+    <p class="hero-description">
+      Bringing you the finest Nogizaka46 subbed content — member blogs, variety shows, and more.
+    </p>
 
     <div class="hero-stats" role="list" aria-label="Site statistics">
       <div class="hero-stat" role="listitem">
@@ -95,13 +99,13 @@
                  ============================== -->
             <article class="post-card featured-post"
                      role="listitem"
-                     data-url="{% url 'post_detail' post.pk %}"
+                     data-url="{% url 'post_detail' post.slug %}"
                      aria-label="{{ post.title }}">
 
               <!-- Thumbnail -->
               <div class="post-thumbnail">
                 {% if post.thumbnail %}
-                  <img src="{{ post.thumbnail }}"
+                  <img src="{{ post.thumbnail}}"
                        alt="{{ post.title }} thumbnail"
                        loading="eager" />
                 {% else %}
@@ -144,7 +148,7 @@
                       <span class="post-tag">#{{ tag.name }}</span>
                     {% endfor %}
                   </div>
-                  <a href="{% url 'post_detail' post.pk %}" class="post-read-more" aria-label="Read more about {{ post.title }}">
+                  <a href="{% url 'post_detail' post.slug %}" class="post-read-more" aria-label="Read more about {{ post.title }}">
                     Read More
                     <span class="post-read-more-arrow" aria-hidden="true">→</span>
                   </a>
@@ -158,7 +162,7 @@
                  ============================== -->
             <article class="post-card"
                      role="listitem"
-                     data-url="{% url 'post_detail' post.pk %}"
+                     data-url="{% url 'post_detail' post.slug %}"
                      aria-label="{{ post.title }}">
 
               <!-- Thumbnail -->
@@ -205,7 +209,7 @@
                       <span class="post-tag">#{{ tag.name }}</span>
                     {% endfor %}
                   </div>
-                  <a href="{% url 'post_detail' post.pk %}" class="post-read-more" aria-label="Read more about {{ post.title }}">
+                  <a href="{% url 'post_detail' post.slug %}" class="post-read-more" aria-label="Read more about {{ post.title }}">
                     Read
                     <span class="post-read-more-arrow" aria-hidden="true">→</span>
                   </a>
@@ -310,13 +314,13 @@
       {% if recent_posts %}
         <div role="list">
           {% for post in recent_posts %}
-            <a href="{% url 'post_detail' post.pk %}"
+            <a href="{% url 'post_detail' post.slug %}"
                class="recent-post-item"
                role="listitem"
                aria-label="{{ post.title }}">
               <div class="recent-post-thumb">
                 {% if post.thumbnail %}
-                  <img src="{{ post.thumbnail }}" alt="{{ post.title }}" loading="lazy" />
+                  <img src="{{ post.thumbnail}}" alt="{{ post.title }}" loading="lazy" />
                 {% endif %}
               </div>
               <div class="recent-post-info">
@@ -351,7 +355,7 @@
                aria-label="{{ member.name }} — {{ member.post_count }} posts">
               <div class="member-avatar-sm" aria-hidden="true">
                 {% if member.avatar %}
-                  <img src="{{ member.avatar }}" alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+                  <img src="{{ member.avatar.url }}" alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
                 {% else %}
                   🌸
                 {% endif %}
@@ -371,10 +375,10 @@
         About Us
       </h3>
       <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
-        Kurotsukisubs adalah fansub yang menerjemahkan konten Nogizaka46, terutama Setoguchi Mitsuki.
+        Kurotsukisubs is a fan-driven subtitle project dedicated to Nogizaka46. We translate and subtitle content to share with international fans.
       </p>
       <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 12px; opacity: 0.7;">
-        Tidak berafiliasi dengan Sony Music atau Nogizaka46 LLC.
+        Not affiliated with Sony Music or Nogizaka46 LLC.
       </p>
     </div>
 

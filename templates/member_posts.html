@@ -116,7 +116,7 @@
         <!-- Thumbnail -->
         <div class="post-thumbnail">
           {% if post.thumbnail %}
-            <img src="{{ post.thumbnail }}"
+            <img src="{{ post.thumbnail.url }}"
                  alt="{{ post.title }} thumbnail"
                  loading="lazy" />
           {% else %}
