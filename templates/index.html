@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+{% block meta_description %}Kurotsukisubs — Latest Nogizaka46 subbed content. Browse the newest posts from your favorite members.{% endblock %}
+
+{% block hero %}
+<!-- ============================================
+     HERO BANNER
+     ============================================ -->
+<section class="hero-banner" aria-label="Hero banner">
+  <div class="hero-bg">
+    <!-- Animated particles -->
+    <div class="hero-particles" aria-hidden="true">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    <!-- Glow orbs -->
+    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero-content fade-in">
+    <div class="hero-badge">
+      <span class="hero-badge-dot" aria-hidden="true"></span>
+      Nogizaka46 Fansub
+    </div>
+
+    <h1 class="hero-title">
+      <span class="title-main">Kurotsukisubs</span>
+      <span class="title-sub">黒月サブス</span>
+    </h1>
+
+    <div class="hero-stats" role="list" aria-label="Site statistics">
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number">{{ total_posts|default:"0" }}</div>
+        <div class="hero-stat-label">Total Posts</div>
+      </div>
+      <div class="hero-divider" aria-hidden="true"></div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number">{{ total_members|default:"0" }}</div>
+        <div class="hero-stat-label">Members</div>
+      </div>
+      <div class="hero-divider" aria-hidden="true"></div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-number">{{ total_downloads|default:"0" }}</div>
+        <div class="hero-stat-label">Downloads</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<!-- ============================================
+     MAIN CONTENT + SIDEBAR LAYOUT
+     ============================================ -->
+<div class="content-with-sidebar">
+
+  <!-- ==========================================
+       POSTS SECTION (Main Column)
+       ========================================== -->
+  <section aria-label="Latest posts">
+
+    <!-- Section Header -->
+    <div class="page-header">
+      <h2 class="section-title">
+        <span class="section-title-icon" aria-hidden="true">✨</span>
+        Latest Posts
+      </h2>
+      <p class="section-subtitle">
+        {% if page_obj %}
+          Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} posts
+        {% else %}
+          The newest subbed content from Nogizaka46
+        {% endif %}
+      </p>
+      <div class="section-divider" aria-hidden="true"></div>
+    </div>
+
+    <!-- Posts Grid -->
+    {% if posts %}
+      <div class="posts-grid" role="list">
+
+        {% for post in posts %}
+          {% if forloop.first %}
+            <!-- ==============================
+                 FEATURED POST (First / Newest)
+                 ============================== -->
+            <article class="post-card featured-post"
+                     role="listitem"
+                     data-url="{% url 'post_detail' post.pk %}"
+                     aria-label="{{ post.title }}">
+
+              <!-- Thumbnail -->
+              <div class="post-thumbnail">
+                {% if post.thumbnail %}
+                  <img src="{{ post.thumbnail }}"
+                       alt="{{ post.title }} thumbnail"
+                       loading="eager" />
+                {% else %}
+                  <div class="post-thumbnail-placeholder" aria-hidden="true">🌸</div>
+                {% endif %}
+                <span class="post-category-badge">{{ post.category|default:"General" }}</span>
+                <span class="post-new-badge">NEW</span>
+              </div>
+
+              <!-- Body -->
+              <div class="post-body">
+                <div class="featured-label" aria-label="Featured post">
+                  <span aria-hidden="true">⭐</span> Featured
+                </div>
+
+                <div class="post-meta">
+                  <span class="post-date">
+                    <span class="post-date-icon" aria-hidden="true">📅</span>
+                    <time datetime="{{ post.created_at|date:'Y-m-d' }}">
+                      {{ post.created_at|date:"F j, Y" }}
+                    </time>
+                  </span>
+                  {% if post.member %}
+                    <span class="post-member-tag">
+                      <span aria-hidden="true">👤</span>
+                      {{ post.member.name }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <h3 class="post-title">{{ post.title }}</h3>
+
+                <p class="post-excerpt">
+                  {{ post.excerpt|default:post.content|truncatewords:50 }}
+                </p>
+
+                <div class="post-footer">
+                  <div class="post-tags" aria-label="Tags">
+                    {% for tag in post.tags.all|slice:":3" %}
+                      <span class="post-tag">#{{ tag.name }}</span>
+                    {% endfor %}
+                  </div>
+                  <a href="{% url 'post_detail' post.pk %}" class="post-read-more" aria-label="Read more about {{ post.title }}">
+                    Read More
+                    <span class="post-read-more-arrow" aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+          {% else %}
+            <!-- ==============================
+                 REGULAR POST CARD
+                 ============================== -->
+            <article class="post-card"
+                     role="listitem"
+                     data-url="{% url 'post_detail' post.pk %}"
+                     aria-label="{{ post.title }}">
+
+              <!-- Thumbnail -->
+              <div class="post-thumbnail">
+                {% if post.thumbnail %}
+                  <img src="{{ post.thumbnail }}"
+                       alt="{{ post.title }} thumbnail"
+                       loading="lazy" />
+                {% else %}
+                  <div class="post-thumbnail-placeholder" aria-hidden="true">🌸</div>
+                {% endif %}
+                <span class="post-category-badge">{{ post.category|default:"General" }}</span>
+                {% if forloop.counter <= 3 %}
+                  <span class="post-new-badge">NEW</span>
+                {% endif %}
+              </div>
+
+              <!-- Body -->
+              <div class="post-body">
+                <div class="post-meta">
+                  <span class="post-date">
+                    <span class="post-date-icon" aria-hidden="true">📅</span>
+                    <time datetime="{{ post.created_at|date:'Y-m-d' }}">
+                      {{ post.created_at|date:"M j, Y" }}
+                    </time>
+                  </span>
+                  {% if post.member %}
+                    <span class="post-member-tag">
+                      <span aria-hidden="true">👤</span>
+                      {{ post.member.name }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <h3 class="post-title">{{ post.title }}</h3>
+
+                <p class="post-excerpt">
+                  {{ post.excerpt|default:post.content|truncatewords:30 }}
+                </p>
+
+                <div class="post-footer">
+                  <div class="post-tags" aria-label="Tags">
+                    {% for tag in post.tags.all|slice:":2" %}
+                      <span class="post-tag">#{{ tag.name }}</span>
+                    {% endfor %}
+                  </div>
+                  <a href="{% url 'post_detail' post.pk %}" class="post-read-more" aria-label="Read more about {{ post.title }}">
+                    Read
+                    <span class="post-read-more-arrow" aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+          {% endif %}
+        {% endfor %}
+
+      </div><!-- /.posts-grid -->
+
+    {% else %}
+      <!-- Empty State -->
+      <div class="empty-state" role="status">
+        <div class="empty-state-icon" aria-hidden="true">🌙</div>
+        <h3 class="empty-state-title">No posts yet</h3>
+        <p class="empty-state-text">
+          Check back soon — new subbed content is on the way!
+        </p>
+      </div>
+    {% endif %}
+
+    <!-- ==========================================
+         PAGINATION
+         ========================================== -->
+    {% if page_obj and page_obj.paginator.num_pages > 1 %}
+      <nav aria-label="Post pagination">
+        <p class="pagination-info">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </p>
+
+        <div class="pagination-wrapper" role="list">
+
+          <!-- Previous -->
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+               class="page-btn page-btn-nav"
+               role="listitem"
+               aria-label="Previous page">
+              ← Prev
+            </a>
+          {% else %}
+            <span class="page-btn page-btn-nav disabled" role="listitem" aria-disabled="true">← Prev</span>
+          {% endif %}
+
+          <!-- Page Numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="page-btn active" role="listitem" aria-current="page" aria-label="Page {{ num }}">
+                {{ num }}
+              </span>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+              <a href="?page={{ num }}"
+                 class="page-btn"
+                 role="listitem"
+                 aria-label="Go to page {{ num }}">
+                {{ num }}
+              </a>
+            {% elif num == 1 or num == page_obj.paginator.num_pages %}
+              <a href="?page={{ num }}"
+                 class="page-btn"
+                 role="listitem"
+                 aria-label="Go to page {{ num }}">
+                {{ num }}
+              </a>
+            {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+              <span class="page-btn disabled" role="listitem" aria-hidden="true">…</span>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Next -->
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+               class="page-btn page-btn-nav"
+               role="listitem"
+               aria-label="Next page">
+              Next →
+            </a>
+          {% else %}
+            <span class="page-btn page-btn-nav disabled" role="listitem" aria-disabled="true">Next →</span>
+          {% endif %}
+
+        </div>
+      </nav>
+    {% endif %}
+
+  </section><!-- /posts section -->
+
+  <!-- ==========================================
+       SIDEBAR
+       ========================================== -->
+  <aside class="sidebar" aria-label="Sidebar">
+
+    <!-- Recent Posts Widget -->
+    <div class="sidebar-widget">
+      <h3 class="sidebar-widget-title">
+        <span class="sidebar-widget-title-icon" aria-hidden="true">🕐</span>
+        Recent Posts
+      </h3>
+
+      {% if recent_posts %}
+        <div role="list">
+          {% for post in recent_posts %}
+            <a href="{% url 'post_detail' post.pk %}"
+               class="recent-post-item"
+               role="listitem"
+               aria-label="{{ post.title }}">
+              <div class="recent-post-thumb">
+                {% if post.thumbnail %}
+                  <img src="{{ post.thumbnail }}" alt="{{ post.title }}" loading="lazy" />
+                {% endif %}
+              </div>
+              <div class="recent-post-info">
+                <div class="recent-post-title">{{ post.title }}</div>
+                <div class="recent-post-date">
+                  <time datetime="{{ post.created_at|date:'Y-m-d' }}">
+                    {{ post.created_at|date:"M j, Y" }}
+                  </time>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No recent posts.</p>
+      {% endif %}
+    </div>
+
+    <!-- Members Widget -->
+    {% if members %}
+      <div class="sidebar-widget">
+        <h3 class="sidebar-widget-title">
+          <span class="sidebar-widget-title-icon" aria-hidden="true">👥</span>
+          Members
+        </h3>
+
+        <div class="member-list" role="list">
+          {% for member in members %}
+            <a href="{% url 'member_posts' %}?member={{ member.pk }}"
+               class="member-item"
+               role="listitem"
+               aria-label="{{ member.name }} — {{ member.post_count }} posts">
+              <div class="member-avatar-sm" aria-hidden="true">
+                {% if member.avatar %}
+                  <img src="{{ member.avatar }}" alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+                {% else %}
+                  🌸
+                {% endif %}
+              </div>
+              <span class="member-name">{{ member.name }}</span>
+              <span class="member-post-count">{{ member.post_count }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- About Widget -->
+    <div class="sidebar-widget">
+      <h3 class="sidebar-widget-title">
+        <span class="sidebar-widget-title-icon" aria-hidden="true">🌙</span>
+        About Us
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+        Kurotsukisubs adalah fansub yang menerjemahkan konten Nogizaka46, terutama Setoguchi Mitsuki.
+      </p>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 12px; opacity: 0.7;">
+        Tidak berafiliasi dengan Sony Music atau Nogizaka46 LLC.
+      </p>
+    </div>
+
+  </aside>
+
+</div><!-- /.content-with-sidebar -->
+{% endblock %}

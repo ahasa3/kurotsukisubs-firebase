@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{% block meta_description %}Kurotsukisubs — Your dedicated Nogizaka46 fansub community. Watch, download, and enjoy subbed content.{% endblock %}" />
+  <meta name="keywords" content="Nogizaka46, fansub, Kurotsukisubs, Japanese idol, subtitles" />
+  <meta name="theme-color" content="#6b21a8" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kurotsukisubs" />
+  <meta property="og:title" content="{% block og_title %}Kurotsukisubs — Nogizaka46 Fansub{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Your dedicated Nogizaka46 fansub community.{% endblock %}" />
+  <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'images/og-default.jpg' %}{% endblock %}" />
+
+  <title>{% block title %}Kurotsukisubs{% endblock %} | Nogizaka46 Fansub</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236b21a8'/><text y='.9em' font-size='80' x='10'>黒</text></svg>" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ============================================
+       NAVIGATION
+       ============================================ -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-inner">
+
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="navbar-logo" aria-label="Kurotsukisubs Home">
+        <div class="logo-icon" aria-hidden="true">黒</div>
+        <div class="logo-text">
+          <span class="logo-name">Kurotsukisubs</span>
+          <span class="logo-tagline">Nogizaka46 Fansub</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="navbar-nav" role="list">
+        <li>
+          <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+            <span class="nav-icon" aria-hidden="true">🏠</span>
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'member_posts' %}" class="nav-link {% if request.resolver_match.url_name == 'member_posts' %}active{% endif %}">
+            <span class="nav-icon" aria-hidden="true">👤</span>
+            Member Posts
+          </a>
+        </li>
+      </ul>
+
+      <!-- Mobile Toggle -->
+      <button class="navbar-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ============================================
+       PAGE CONTENT
+       ============================================ -->
+  {% block hero %}{% endblock %}
+
+  <main class="main-content" id="main-content">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+          <a href="{% url 'home' %}" class="footer-logo" aria-label="Kurotsukisubs">
+            <div class="footer-logo-icon" aria-hidden="true">黒</div>
+            <span class="footer-logo-name">Kurotsukisubs</span>
+          </a>
+          <p class="footer-description">
+            Fansub yang menerjemahkan konten Nogizaka46, terutama Setoguchi Mitsuki.
+          </p>
+          <div class="footer-social" aria-label="Social media links">
+            <a href="https://x.com/KurotsukiSubs" class="social-btn" aria-label="Twitter" title="Twitter">X</a>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div>
+          <h3 class="footer-col-title">Navigation</h3>
+          <ul class="footer-links" role="list">
+            <li><a href="{% url 'home' %}">🏠 Home</a></li>
+            <li><a href="{% url 'member_posts' %}">👤 Member Posts</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          © {% now "Y" %} <span>Kurotsukisubs</span>. Made with 💜 for Nogizaka46 fans.
+        </p>
+        <p class="footer-disclaimer">
+          Fan project only. All content belongs to their respective owners. Nogizaka46 © Sony Music.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top-btn" aria-label="Scroll to top" title="Back to top">↑</button>
+
+  <!-- Toast Container (injected by JS) -->
+
+  <!-- Scripts -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

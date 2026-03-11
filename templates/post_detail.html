@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+{% block meta_description %}{{ post.excerpt|default:post.content|truncatewords:30 }}{% endblock %}
+{% block og_title %}{{ post.title }} | Kurotsukisubs{% endblock %}
+{% block og_description %}{{ post.excerpt|default:post.content|truncatewords:30 }}{% endblock %}
+{% if post.thumbnail %}
+  {% block og_image %}{{ post.thumbnail }}{% endblock %}
+{% endif %}
+
+{% block content %}
+<div class="post-detail-wrapper">
+
+  <!-- ============================================
+       BACK BUTTON
+       ============================================ -->
+  <a href="javascript:history.back()" class="back-btn" aria-label="Go back">
+    <span aria-hidden="true">←</span>
+    Back
+  </a>
+
+  <!-- ============================================
+       POST HEADER
+       ============================================ -->
+  <header class="post-detail-header">
+
+    <!-- Meta -->
+    <div class="post-detail-meta">
+      <span class="post-detail-category">{{ post.category|default:"General" }}</span>
+      <span class="post-detail-date">
+        <span aria-hidden="true">📅</span>
+        <time datetime="{{ post.created_at|date:'Y-m-d' }}">
+          {{ post.created_at|date:"F j, Y" }}
+        </time>
+      </span>
+      {% if post.updated_at and post.updated_at != post.created_at %}
+        <span class="post-detail-date" style="color: var(--text-muted); font-size: 0.78rem;">
+          (Updated {{ post.updated_at|date:"M j, Y" }})
+        </span>
+      {% endif %}
+    </div>
+
+    <!-- Title -->
+    <h1 class="post-detail-title">{{ post.title }}</h1>
+
+    <!-- Author / Member -->
+    {% if post.member %}
+      <div class="post-detail-author">
+        <div class="author-avatar" aria-hidden="true">
+          {% if post.member.avatar %}
+            <img src="{{ post.member.avatar }}"
+                 alt="{{ post.member.name }}"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+          {% else %}
+            🌸
+          {% endif %}
+        </div>
+        <div class="author-info">
+          <div class="author-name">{{ post.member.name }}</div>
+          <div class="author-role">Nogizaka46 Member</div>
+        </div>
+        <a href="{% url 'member_posts' %}?member={{ post.member.pk }}"
+           class="post-read-more"
+           aria-label="View all posts by {{ post.member.name }}"
+           style="font-size: 0.82rem;">
+          All posts
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    {% endif %}
+
+  </header>
+
+  <!-- ============================================
+       THUMBNAIL
+       ============================================ -->
+  <div class="post-detail-thumbnail">
+    {% if post.thumbnail %}
+      <img src="{{ post.thumbnail }}"
+           alt="{{ post.title }} cover image"
+           loading="eager" />
+    {% else %}
+      <div class="post-detail-thumbnail-placeholder" aria-hidden="true">🌸</div>
+    {% endif %}
+  </div>
+
+  <!-- ============================================
+       POST CONTENT
+       ============================================ -->
+  <article class="post-detail-content" aria-label="Post content">
+    {{ post.content|safe }}
+  </article>
+
+  <!-- ============================================
+       DOWNLOAD LINKS
+       ============================================ -->
+  {% if post.downloads.all %}
+    <section class="download-section" aria-label="Download links">
+      <h2 class="download-section-title">
+        <span aria-hidden="true">⬇️</span>
+        Download Links
+      </h2>
+
+      <div class="download-links" role="list">
+        {% for dl in post.downloads.all %}
+          <a href="{{ dl.url }}"
+             class="download-link"
+             role="listitem"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="Download {{ dl.label }}{% if dl.file_size %} ({{ dl.file_size }}){% endif %}">
+
+            <div class="download-link-info">
+              <div class="download-link-icon" aria-hidden="true">
+                {% if dl.host == "gdrive" %}<img src=" https://lh3.googleusercontent.com/d/1l9mJojCz2Lqwz5TorXE4BjVmyGy3FHXy">
+                {% elif dl.host == "trakteer" %}<img src="https://edge-cdn.trakteer.id/images/mix/trakteer-logo-new.png">
+                {% else %}📥{% endif %}
+                
+              </div>
+              <div>
+                <div class="download-link-name">{{ dl.label }}</div>
+                {% if dl.file_size %}
+                  <div class="download-link-size">{{ dl.file_size }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <span class="download-btn" aria-hidden="true">
+              ⬇️ Download
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- ============================================
+       TAGS
+       ============================================ -->
+  {% if post.tags.all %}
+    <div class="post-tags-section" aria-label="Post tags">
+      <span class="tags-label">Tags:</span>
+      {% for tag in post.tags.all %}
+        <a href="{% url 'member_posts' %}?tag={{ tag.slug }}"
+           class="tag-pill"
+           aria-label="View posts tagged {{ tag.name }}">
+          #{{ tag.name }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- ============================================
+       RELATED POSTS
+       ============================================ -->
+  {% if related_posts %}
+    <section class="related-posts" aria-label="Related posts">
+      <div class="page-header">
+        <h2 class="section-title">
+          <span class="section-title-icon" aria-hidden="true">🔗</span>
+          Related Posts
+        </h2>
+        <div class="section-divider" aria-hidden="true"></div>
+      </div>
+
+      <div class="related-posts-grid posts-grid" role="list">
+        {% for related in related_posts %}
+          <article class="post-card"
+                   role="listitem"
+                   data-url="{% url 'post_detail' related.pk %}"
+                   aria-label="{{ related.title }}">
+
+            <div class="post-thumbnail">
+              {% if related.thumbnail %}
+                <img src="{{ related.thumbnail }}"
+                     alt="{{ related.title }} thumbnail"
+                     loading="lazy" />
+              {% else %}
+                <div class="post-thumbnail-placeholder" aria-hidden="true">🌸</div>
+              {% endif %}
+              <span class="post-category-badge">{{ related.category|default:"General" }}</span>
+            </div>
+
+            <div class="post-body">
+              <div class="post-meta">
+                <span class="post-date">
+                  <time datetime="{{ related.created_at|date:'Y-m-d' }}">
+                    {{ related.created_at|date:"M j, Y" }}
+                  </time>
+                </span>
+              </div>
+              <h3 class="post-title">{{ related.title }}</h3>
+              <p class="post-excerpt">{{ related.excerpt|default:related.content|truncatewords:20 }}</p>
+              <div class="post-footer">
+                <div></div>
+                <a href="{% url 'post_detail' related.pk %}" class="post-read-more">
+                  Read <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- ============================================
+       NAVIGATION (Prev / Next Post)
+       ============================================ -->
+  {% if prev_post or next_post %}
+    <nav class="post-navigation" aria-label="Post navigation" style="display: flex; justify-content: space-between; gap: 16px; margin-top: 50px; flex-wrap: wrap;">
+
+      {% if prev_post %}
+        <a href="{% url 'post_detail' prev_post.pk %}"
+           style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 6px; padding: 16px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); transition: var(--transition); text-decoration: none;"
+           aria-label="Previous post: {{ prev_post.title }}">
+          <span style="font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">← Previous</span>
+          <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">{{ prev_post.title|truncatewords:8 }}</span>
+        </a>
+      {% else %}
+        <div style="flex: 1;"></div>
+      {% endif %}
+
+      {% if next_post %}
+        <a href="{% url 'post_detail' next_post.pk %}"
+           style="flex: 1; min-width: 200px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding: 16px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); transition: var(--transition); text-decoration: none;"
+           aria-label="Next post: {{ next_post.title }}">
+          <span style="font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Next →</span>
+          <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">{{ next_post.title|truncatewords:8 }}</span>
+        </a>
+      {% endif %}
+
+    </nav>
+  {% endif %}
+
+</div><!-- /.post-detail-wrapper -->
+{% endblock %}

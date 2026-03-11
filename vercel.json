@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "kurotsukisubs/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "kurotsukisubs/wsgi.py"
+    }
+  ]
+}
