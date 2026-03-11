@@ -1,15 +1,18 @@
 {
   "builds": [
     {
-      "src": "kurotsukisubs_firebase/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python",
-      "config": {"maxLambdaSiza":"15mb", "runtime":"python3.14.3"}
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.11"
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "kurotsukisubs_firebase/wsgi.py"
+      "dest": "api/index.py"
     }
   ]
 }
