@@ -1,14 +1,14 @@
 {
   "builds": [
     {
-      "src": "kurotsukisubs/wsgi.py",
+      "src": "kurotsukisubs_firebase/wsgi.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "kurotsukisubs/wsgi.py"
+      "dest": "kurotsukisubs_firebase/wsgi.py"
     }
   ]
 }
