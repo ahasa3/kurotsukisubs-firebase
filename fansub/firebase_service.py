@@ -128,10 +128,15 @@ def _doc_to_post(doc, member_map: dict = None) -> dict:
     elif member_id:
         member = {'id': member_id, 'name': member_name, 'avatar_url': '', 'post_count': 0}
 
+    db = get_db()
+
+    downloads = []
+    dl_docs = db.collection(_col('posts')).document(doc.id).collection('downloads').stream()
+    downloads = [{'id': d.id, **d.to_dict()} for d in dl_docs]
     return {
         'id': doc.id,
         'pk': doc.id,   # alias so templates can use post.pk
-        'slug': data.get('slug',''),
+        'slug': data.get('slug','') or doc.id,
         'title': data.get('title', ''),
         'excerpt': data.get('excerpt', ''),
         'content': data.get('content', ''),
@@ -142,7 +147,7 @@ def _doc_to_post(doc, member_map: dict = None) -> dict:
         'tags': [],   # populated separately if needed
         'created_at': _ts_to_dt(data.get('created_at')),
         'updated_at': _ts_to_dt(data.get('updated_at')),
-        'downloads': data.get('downloads', []),
+        'downloads': downloads,
     }
 
 
@@ -202,7 +207,7 @@ def get_all_tags() -> list[dict]:
 
 def get_tag_by_slug(slug: str) -> Optional[dict]:
     db = get_db()
-    docs = list(db.collection(_col('tags')).where('slug', '==', slug).limit(1).stream())
+    docs = list(db.collection(_col('tags')).where(filter=FieldFilter("slug", "==", slug)).limit(1).stream())
     if docs:
         return {'id': docs[0].id, **docs[0].to_dict()}
     return None

@@ -50,6 +50,7 @@ def home(request):
     try:
         # Fetch all posts (ordered by created_at desc)
         raw_posts, total_posts = fs.get_posts()
+        print(raw_posts)
         posts_objs = [post_from_dict(p) for p in raw_posts]
 
         # Paginate

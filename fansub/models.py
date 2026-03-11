@@ -65,6 +65,7 @@ class Member:
 class Post:
     id: str
     title: str
+    slug: str
     excerpt: str = ''
     content: str = ''
     thumbnail_url: str = ''
