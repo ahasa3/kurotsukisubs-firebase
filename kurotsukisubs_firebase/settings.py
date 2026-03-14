@@ -102,9 +102,6 @@ DATABASES = {
 # FIREBASE CONFIGURATION
 # ─────────────────────────────────────────────────────────────────────────────
 # Option A — Service Account JSON file path (recommended for local dev)
-FIREBASE_CREDENTIALS_PATH = os.environ.get(
-    'FIREBASE_CREDENTIALS_PATH'
-)
 
 # Option B — Individual env vars (recommended for production / CI)
 FIREBASE_PROJECT_ID      = os.environ.get('FIREBASE_PROJECT_ID', '')
