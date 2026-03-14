@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="{% block meta_description %}Kurotsukisubs — Your dedicated Nogizaka46 fansub community. Watch, download, and enjoy subbed content.{% endblock %}" />
+  <meta name="description" content="{% block meta_description %}Kurotsukisubs — Your dedicated Nogizaka46 fansub. Enjoy subbed content.{% endblock %}" />
   <meta name="keywords" content="Nogizaka46, fansub, Kurotsukisubs, Japanese idol, subtitles" />
   <meta name="theme-color" content="#6b21a8" />
 
@@ -11,7 +11,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Kurotsukisubs" />
   <meta property="og:title" content="{% block og_title %}Kurotsukisubs — Nogizaka46 Fansub{% endblock %}" />
-  <meta property="og:description" content="{% block og_description %}Your dedicated Nogizaka46 fansub community.{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Your dedicated Nogizaka46 fansub.{% endblock %}" />
   <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'images/og-default.jpg' %}{% endblock %}" />
 
   <title>{% block title %}Kurotsukisubs{% endblock %} | Nogizaka46 Fansub</title>
@@ -40,7 +40,7 @@
 
       <!-- Logo -->
       <a href="{% url 'home' %}" class="navbar-logo" aria-label="Kurotsukisubs Home">
-        <div class="logo-icon" aria-hidden="true">🌙</div>
+        <div class="logo-icon" aria-hidden="true">黒</div>
         <div class="logo-text">
           <span class="logo-name">Kurotsukisubs</span>
           <span class="logo-tagline">Nogizaka46 Fansub</span>
@@ -94,11 +94,11 @@
         <!-- Brand -->
         <div class="footer-brand">
           <a href="{% url 'home' %}" class="footer-logo" aria-label="Kurotsukisubs">
-            <div class="footer-logo-icon" aria-hidden="true">🌙</div>
+            <div class="footer-logo-icon" aria-hidden="true">黒</div>
             <span class="footer-logo-name">Kurotsukisubs</span>
           </a>
           <p class="footer-description">
-            A fan-made subtitle project dedicated to Nogizaka46. We bring you the best subbed content from your favorite members. Not affiliated with Sony Music or Nogizaka46 LLC.
+            Fansub yang menerjemahkan konten Nogizaka46, terutama Setoguchi Mitsuki.
           </p>
           <div class="footer-social" aria-label="Social media links">
             <a href="#" class="social-btn" aria-label="Twitter" title="Twitter">🐦</a>
@@ -114,17 +114,6 @@
           <ul class="footer-links" role="list">
             <li><a href="{% url 'home' %}">🏠 Home</a></li>
             <li><a href="{% url 'member_posts' %}">👤 Member Posts</a></li>
-          </ul>
-        </div>
-
-        <!-- Info -->
-        <div>
-          <h3 class="footer-col-title">About</h3>
-          <ul class="footer-links" role="list">
-            <li><a href="#">ℹ️ About Us</a></li>
-            <li><a href="#">📋 Guidelines</a></li>
-            <li><a href="#">📬 Contact</a></li>
-            <li><a href="#">🔒 Privacy</a></li>
           </ul>
         </div>
 
