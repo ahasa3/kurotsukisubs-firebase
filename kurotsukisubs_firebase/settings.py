@@ -103,8 +103,7 @@ DATABASES = {
 # ─────────────────────────────────────────────────────────────────────────────
 # Option A — Service Account JSON file path (recommended for local dev)
 FIREBASE_CREDENTIALS_PATH = os.environ.get(
-    'FIREBASE_CREDENTIALS_PATH',
-    str(BASE_DIR / 'firebase-credentials.json')
+    'FIREBASE_CREDENTIALS_PATH'
 )
 
 # Option B — Individual env vars (recommended for production / CI)
