@@ -64,6 +64,31 @@ def _init_firebase() -> None:
             "client_x509_cert_url": getattr(settings, 'FIREBASE_CLIENT_CERT_URL', ''),
         })
         logger.info("Firebase: initialised from environment variables (project: %s)", project_id)
+    elif project_id and getattr(settings, 'FIREBASE_PRIVATE_KEY', ''):
+        private_key = getattr(settings, 'FIREBASE_PRIVATE_KEY', '')
+        private_key_id = getattr(settings, 'FIREBASE_PRIVATE_KEY_ID', '')
+        client_email = getattr(settings, 'FIREBASE_CLIENT_EMAIL', '')
+        
+        # TEMPORARY DEBUG
+        logger.info("DEBUG private_key_id: %s", private_key_id)
+        logger.info("DEBUG client_email: %s", client_email)
+        logger.info("DEBUG private_key[:80]: %s", private_key[:80])
+        logger.info("DEBUG private_key contains literal backslash-n: %s", '\\n' in private_key)
+        logger.info("DEBUG private_key contains real newline: %s", '\n' in private_key)
+        
+        cred = credentials.Certificate({
+            "type": "service_account",
+            "project_id": project_id,
+            "private_key_id": private_key_id,
+            "private_key": private_key,
+            "client_email": client_email,
+            "client_id": getattr(settings, 'FIREBASE_CLIENT_ID', ''),
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": getattr(settings, 'FIREBASE_CLIENT_CERT_URL', ''),
+        })
+        logger.info("Firebase: initialised from environment variables (project: %s)", project_id)
     else:
         # Fallback: Application Default Credentials (useful on GCP / Cloud Run)
         cred = credentials.ApplicationDefault()
